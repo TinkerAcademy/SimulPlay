@@ -47,9 +47,10 @@ function startGame()
 	initializeGame()
 	registerMyTurn(myTurn)
 	registerMyScore(myScore)
+	listenToCollisionEvents()
 end
 
-function onCollision(event)
+function onCollision(event)	
 	if (event.phase == "began") then
 		if (event.object1 == ball and event.object2 == ground) then
 			resetScore()
@@ -59,6 +60,8 @@ function onCollision(event)
 	end
 end
 
-Runtime:addEventListener( "collision", onCollision )
+function listenToCollisionEvents()
+	Runtime:addEventListener( "collision", onCollision )
+end
 
 
