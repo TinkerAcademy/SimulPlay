@@ -19,7 +19,10 @@ ball = nil
 
 function onBallTapped(event)
 	addScore()
-	ball:applyLinearImpulse(mul * 100, -500, ball.x, ball.y)
+	math.randomseed(os.time())
+	local randomXImpulse = math.random(500, 1000)
+	local randomYImpulse = math.random(-1000, -500)
+	ball:applyLinearImpulse(randomXImpulse, randomYImpulse, ball.x, ball.y)
 	ball:applyAngularImpulse(100)
 end
 
@@ -34,7 +37,8 @@ function myTurn(score)
 	end
 	ball = display.newImage( "soccer_ball.png", 180, -50 )
 	math.randomseed(os.time())
-	ball.x = math.random(40, 280)	
+	ball.x = math.random(60, 240)	
+	ball.rotation = 5
 	ball:addEventListener("tap", onBallTapped)
 	physics.addBody( ball, { density=3.0, friction=0.5, bounce=0.8 } )
 end
@@ -48,6 +52,8 @@ end
 function onCollision(event)
 	if (event.phase == "began") then
 		if (event.object1 == ball and event.object2 == ground) then
+			resetScore()
+		elseif (event.object1 == ground and event.object2 == ball) then
 			resetScore()
 		end
 	end

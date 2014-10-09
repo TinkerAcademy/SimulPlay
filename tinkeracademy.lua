@@ -26,7 +26,31 @@ myTurnCallback = nil
 
 myScoreCallback = nil
 
+debugMode = false
+
 local json = require("json")
+
+debugButton = widget.newButton
+{
+	id = "debug",
+	isEnabled = false,
+	fontSize = 12,
+	font = "Arial",
+	x = 240,
+	y = 0,
+	textOnly = true,
+	labelColor = { default={ 1, 1, 0 } }
+}
+
+function debugText(text)
+	if (debugMode) then
+		debugButton:setLabel(text)
+	end
+end
+
+function logText(text)
+	debugButton:setLabel(text)
+end
 
 function nextTurnNetworkListener(event)
 	if (event.phase == "ended") then
@@ -36,8 +60,10 @@ function nextTurnNetworkListener(event)
 			server_user_uid = decoded.user_uid
 			server_score = decoded.score
 			if (server_user_uid == user_uid) then
+				debugText("YOUR TURN!")
 				myTurnCallback(server_score)
 			else
+				debugText("OTHERS TURN!")
 				myScoreCallback(server_score)
 			end
 		end
@@ -45,10 +71,9 @@ function nextTurnNetworkListener(event)
 end
 
 function updateTimer()
-	print "timer updated"
-	local params = {}
-	params.user_uid = user_uid
-	network.request( NEXT_TURN_URL, "GET", nextTurnNetworkListener, params)
+	local url_params = "?user_uid="..user_uid
+	local url = NEXT_TURN_URL..url_params
+	network.request( url, "GET", nextTurnNetworkListener)
 end
 
 function registerMyTurn(callback)
@@ -70,9 +95,10 @@ function addScoreNetworkListener(event)
 end
 
 function addScore()
-	local params = {}
-	params.user_uid = user_uid
-	network.request( ADD_SCORE_URL, "GET", addScoreNetworkListener, params)
+	logText("GREAT!!!")
+	local url_params = "?user_uid="..user_uid
+	local url = ADD_SCORE_URL..url_params
+	network.request( url, "GET", addScoreNetworkListener)
 end
 
 function resetScoreNetworkListener(event)
@@ -86,12 +112,14 @@ function resetScoreNetworkListener(event)
 end
 
 function resetScore()
-	local params = {}
-	params.user_uid = user_uid
-	network.request( RESET_SCORE_URL, "GET", resetScoreNetworkListener, params)
+	logText("OOPS!")
+	local url_params = "?user_uid="..user_uid
+	local url = RESET_SCORE_URL..url_params
+	network.request( url, "GET", resetScoreNetworkListener)
 end
 
-function initializeGame()
+function initializeGame(debug)
+	debugMode = debug or false
 	print("initialize( )")
-	timer.performWithDelay( 2000, updateTimer, 0 )
+	timer.performWithDelay( 5000, updateTimer, 0 )
 end

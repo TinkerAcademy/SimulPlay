@@ -21,6 +21,10 @@ physics.start()
 
 physics.addBody( ground, "static", { friction=0.5, bounce=0.3 } )
 
+ball = display.newImage( "soccer_ball.png", 180, -50 )
+ball.rotation = 5
+physics.addBody( ball, { density=3.0, friction=0.5, bounce=0.8 } )
+
 widget = require("widget")
 
 scoreButton = widget.newButton
@@ -35,6 +39,12 @@ scoreButton = widget.newButton
 	labelColor = { default={ 1, 1, 0 } }
 }
 
+function displayScore(score)
+	scoreButton:setLabel(score)
+end
+
+displayScore(0)
+
 startButton = widget.newButton
 {
 	id = "start",
@@ -46,12 +56,6 @@ startButton = widget.newButton
 	labelColor = { default={ 0, 1, 0 }, over={0, 1, 0} }
 }
 
-function displayScore(score)
-	scoreButton:setLabel(score)
-end
-
-displayScore(0)
-
 require "game"
 
 function startButtonTappedListener(event)
@@ -60,6 +64,11 @@ function startButtonTappedListener(event)
 end
 
 startButton:addEventListener("tap", startButtonTappedListener)
+
+
+
+
+
 
 
 
