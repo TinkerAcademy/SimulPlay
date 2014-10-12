@@ -18,11 +18,13 @@ uuid = require("uuid")
 
 user_uid = uuid.new()
 
-NEXT_TURN_URL = "http://192.168.1.5/SimulPlay/nextturn"
+IP = "192.168.1.5"
 
-ADD_SCORE_URL = "http://192.168.1.5/SimulPlay/addscore"
+NEXT_TURN_URL = "http://"..IP.."/SimulPlay/nextturn"
 
-RESET_SCORE_URL = "http://192.168.1.5/SimulPlay/resetscore"
+ADD_SCORE_URL =  "http://"..IP.."/SimulPlay/addscore"
+
+RESET_SCORE_URL = "http://"..IP.."/SimulPlay/resetscore"
 
 myTurnCallback = nil
 
